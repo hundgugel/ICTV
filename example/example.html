@@ -92,47 +92,28 @@
         
         <!-- Маркер 1: Трикутник з формулами -->
         <a-marker preset="custom" type="pattern" url="../markers/pattern-tr.patt" id="triangleMarker">
-            <!-- Тривимірний трикутник -->
-            <a-entity id="triangleFormulas" geometry="primitive: plane; width: 3; height: 2" 
-                     material="color: rgba(255,255,255,0.9); transparent: true" 
-                     position="0 0 0.1" 
-                     text="value: ТРИКУТНИК\n\nПлоща: S = (1/2) × a × h\nПлоща Герона: S = √[p(p-a)(p-b)(p-c)]\nПериметр: P = a + b + c\nТеорема Піфагора: a² + b² = c²; 
-                           color: black; align: center; width: 8">
-                <!-- Анімований 3D трикутник -->
-                <a-triangle position="0 1.5 0" rotation="0 0 0" scale="0.8 0.8 0.8" 
-                           material="color: #FF6B35; transparent: true; opacity: 0.7"
-                           animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
-                </a-triangle>
+            <a-entity scale="0.2 0.2 0.2" rotation="-90 0 0" position="0 2 0">
+             	<a-text value="ТРИКУТНИК\n\nПлоща: S = (1/2) × a × h\nПлоща Герона: S = √[p(p-a)(p-b)(p-c)]\nПериметр: P = a + b + c\nТеорема Піфагора: a² + b² = c²;
+             	" color="black" width="10" position="-0.5 1 -6"
+				  font="../fonts/YaHei-msdf.json" negate="false"></a-text>
             </a-entity>
         </a-marker>
 
         <!-- Маркер 2: Квадрат з формулами -->
-        <a-marker preset="custom" type="pattern" url="../markers/pattern-sq.patt" id="squareMarker">
-            <a-entity id="squareFormulas" geometry="primitive: plane; width: 3; height: 2" 
-                     material="color: rgba(255,255,255,0.9); transparent: true" 
-                     position="0 0 0.1" 
-                     text="value: ЧОТИРИКУТНИКИ\n\nКвадрат: S = a²\nПрямокутник: S = a × b\nРомб: S = (1/2) × d₁ × d₂\nПаралелограм: S = a × h\nТрапеція: S = (1/2)(a+b) × h; 
-                           color: black; align: center; width: 8">
-                <!-- Анімований куб -->
-                <a-box position="0 1.5 0" rotation="45 45 0" scale="0.6 0.6 0.6" 
-                       material="color: #4ECDC4; transparent: true; opacity: 0.8"
-                       animation="property: rotation; to: 405 405 360; loop: true; dur: 10000">
-                </a-box>
+        <a-marker preset="custom" type="pattern" url="../markers/pattern-sq.patt" id="squareMarker"></a>
+        		<a-entity scale="0.2 0.2 0.2" rotation="-90 0 0" position="0 2 0">
+             	<a-text value="ЧОТИРИКУТНИКИ\n\nКвадрат: S = a²\nПрямокутник: S = a × b\nРомб: S = (1/2) × d₁ × d₂\nПаралелограм: S = a × h\nТрапеція: S = (1/2)(a+b) × h;
+             	" color="black" width="10" position="-0.5 1 -6"
+				  font="../fonts/YaHei-msdf.json" negate="false"></a-text>
             </a-entity>
         </a-marker>
 
         <!-- Маркер 3: N - Многокутники -->
         <a-marker preset="custom" type="pattern" url="../markers/pattern-n.patt" id="nMarker">
-            <a-entity id="polygonFormulas" geometry="primitive: plane; width: 3; height: 2" 
-                     material="color: rgba(255,255,255,0.9); transparent: true" 
-                     position="0 0 0.1" 
-                     text="value: N-КУТНИКИ\n\nПравильний n-кутник:\nS = (1/4)n × a² × ctg(π/n)\nСума кутів: (n-2) × 180°\nВнутрішній кут: (n-2) × 180°/n\nЗовнішній кут: 360°/n; 
-                           color: black; align: center; width: 8">
-                <!-- Анімований октаедр -->
-                <a-octahedron position="0 1.5 0" rotation="0 0 0" scale="0.7 0.7 0.7" 
-                             material="color: #9B59B6; transparent: true; opacity: 0.7"
-                             animation="property: rotation; to: 360 360 360; loop: true; dur: 12000">
-                </a-octahedron>
+            <a-entity scale="0.2 0.2 0.2" rotation="-90 0 0" position="0 2 0">
+                <a-text value="N-КУТНИКИ\n\nПравильний n-кутник:\nS = (1/4)n × a² × ctg(π/n)\nСума кутів: (n-2) × 180°\nВнутрішній кут: (n-2) × 180°/n\nЗовнішній кут: 360°/n;
+             	" color="black" width="10" position="-0.5 1 -6"
+				  font="../fonts/YaHei-msdf.json" negate="false"></a-text>
             </a-entity>
         </a-marker>
 
@@ -184,292 +165,281 @@
         <a-entity id="linesContainer"></a-entity>
 
         <a-entity camera></a-entity>
+        <a-entity figure-builder></a-entity>
     </a-scene>
 
     <script>
-        // === ГЕОМЕТРИЧНІ РОЗРАХУНКИ ===
-        
-        class GeometryCalculator {
-            // Відстань між двома точками
-            static distance(p1, p2) {
-                return Math.sqrt(
-                    Math.pow(p2.x - p1.x, 2) + 
-                    Math.pow(p2.y - p1.y, 2) + 
-                    Math.pow(p2.z - p1.z, 2)
-                );
-            }
-            
-            // Кут між трьома точками (B - вершина кута)
-            static angle(p1, p2, p3) {
-                const a = this.distance(p2, p3);
-                const b = this.distance(p1, p3);
-                const c = this.distance(p1, p2);
-                
-                const cosAngle = (a*a + c*c - b*b) / (2*a*c);
-                return Math.acos(Math.max(-1, Math.min(1, cosAngle))) * 180 / Math.PI;
-            }
-            
-            // Площа трикутника за координатами
-            static triangleArea(p1, p2, p3) {
-                const a = this.distance(p1, p2);
-                const b = this.distance(p2, p3);
-                const c = this.distance(p3, p1);
-                const s = (a + b + c) / 2;
-                return Math.sqrt(s * (s - a) * (s - b) * (s - c));
-            }
-            
-            // Площа многокутника (метод трапецій)
-            static polygonArea(points) {
-                let area = 0;
-                const n = points.length;
-                for (let i = 0; i < n; i++) {
-                    const j = (i + 1) % n;
-                    area += points[i].x * points[j].z - points[j].x * points[i].z;
-                }
-                return Math.abs(area) / 2;
-            }
+    
+let figureBuilderComponent;
+
+  // Функція зміни режиму (з кнопок)
+  function setMode(mode) {
+    const btns = document.querySelectorAll('.mode-btn');
+    btns.forEach(btn => btn.classList.remove('active'));
+    
+    // Активуємо кнопку відповідного режиму
+    if (mode === 'triangle') btns[0].classList.add('active');
+    else if (mode === 'quadrilateral') btns[1].classList.add('active');
+    else if (mode === 'pentagon') btns[2].classList.add('active');
+
+    // Змінюємо requiredIds у компонента
+    if (!figureBuilderComponent) return;
+
+    if (mode === 'triangle') {
+      figureBuilderComponent.setRequiredPoints(['pointA', 'pointB', 'pointC']);
+      updateInfoTitle('Режим: Трикутник (3 точки)');
+    } else if (mode === 'quadrilateral') {
+      figureBuilderComponent.setRequiredPoints(['pointA', 'pointB', 'pointC', 'pointD']);
+      updateInfoTitle('Режим: Чотирикутник (4 точки)');
+    } else if (mode === 'pentagon') {
+      figureBuilderComponent.setRequiredPoints(['pointA', 'pointB', 'pointC', 'pointD', 'pointG']);
+      updateInfoTitle('Режим: П\'ятикутник (5 точок)');
+    }
+  }
+
+  function updateInfoTitle(text) {
+    const el = document.getElementById('infoTitle');
+    if (el) el.textContent = text;
+  }
+
+  AFRAME.registerComponent('figure-builder', {
+    init: function () {
+      this.detectedPoints = {};
+      this.lines = [];
+      this.requiredIds = ['pointA', 'pointB', 'pointC']; // дефолт
+      this.scene = this.el.sceneEl;
+
+      this.setupMarkerTracking();
+
+      figureBuilderComponent = this; // зберігаємо посилання для зовнішнього доступу
+    },
+
+    setupMarkerTracking: function () {
+      this.clearMarkerListeners();
+      this.requiredIds.forEach(id => {
+        const marker = document.getElementById(id);
+        if (marker) {
+          marker.addEventListener('markerFound', this.onMarkerFound.bind(this, id));
+          marker.addEventListener('markerLost', this.onMarkerLost.bind(this, id));
         }
+      });
+    },
 
-        // === СИСТЕМА УПРАВЛІННЯ РЕЖИМАМИ ===
-        
-        let currentMode = 'triangle';
-        let detectedPoints = {};
-        let activeLines = [];
+    clearMarkerListeners: function () {
+      // Для спрощення можна не очищати, бо маркери статичні
+      // Але тут можна додати видалення старих слухачів, якщо потрібно
+    },
 
-        function setMode(mode) {
-            currentMode = mode;
-            
-            // Оновлюємо UI
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Очищуємо старі лінії
-            clearLines();
-            
-            // Оновлюємо інформацію
-            updateInfo();
-        }
+    onMarkerFound: function (id) {
+      // console.log(`🔵 ${id} знайдено`);
+      this.detectedPoints[id] = document.getElementById(id);
+      this.updateGeometry();
+    },
 
-        // === СИСТЕМА ВІДСЛІДКОВУВАННЯ МАРКЕРІВ ===
-        
-        function initializeMarkerTracking() {
-            const pointMarkers = ['pointA', 'pointB', 'pointC', 'pointD', 'pointG', 'pointF'];
-            
-            pointMarkers.forEach(markerId => {
-                const marker = document.querySelector(`#${markerId}`);
-                if (marker) {
-                    marker.addEventListener('markerFound', () => {
-                        detectedPoints[markerId] = marker;
-                        updateGeometry();
-                    });
-                    
-                    marker.addEventListener('markerLost', () => {
-                        delete detectedPoints[markerId];
-                        updateGeometry();
-                    });
-                }
-            });
-        }
+    onMarkerLost: function (id) {
+      // console.log(`⚪️ ${id} втрачено`);
+      delete this.detectedPoints[id];
+      this.clearLines();
+      this.clearCalculations();
+    },
 
-        // === ГЕОМЕТРИЧНІ РОЗРАХУНКИ ТА ВІЗУАЛІЗАЦІЯ ===
-        
-        function updateGeometry() {
-            const requiredPoints = getRequiredPoints();
-            const availablePoints = Object.keys(detectedPoints);
-            
-            if (availablePoints.length >= requiredPoints.length) {
-                const activePoints = requiredPoints.map(pointId => detectedPoints[pointId]).filter(p => p);
-                
-                if (activePoints.length === requiredPoints.length) {
-                    drawLines(activePoints);
-                    calculateProperties(activePoints);
-                }
-            } else {
-                clearLines();
-                updateInfo('Недостатньо точок для ' + getModeLabel());
-            }
-        }
+    updateGeometry: function () {
+      if (this.requiredIds.every(id => id in this.detectedPoints)) {
+        const points = this.requiredIds.map(id => this.getMarkerPosition(this.detectedPoints[id]));
+        this.clearLines();
+        this.drawLines(points);
+        this.calculateProperties(points);
+      } else {
+        this.clearLines();
+        this.clearCalculations();
+      }
+    },
 
-        function getRequiredPoints() {
-            switch (currentMode) {
-                case 'triangle': return ['pointA', 'pointB', 'pointC'];
-                case 'quadrilateral': return ['pointA', 'pointB', 'pointC', 'pointD'];
-                case 'pentagon': return ['pointA', 'pointB', 'pointC', 'pointD', 'pointG'];
-                default: return [];
-            }
-        }
+    getMarkerPosition: function (marker) {
+      const pos = new THREE.Vector3();
+      marker.object3D.getWorldPosition(pos);
+      return pos;
+    },
 
-        function getModeLabel() {
-            switch (currentMode) {
-                case 'triangle': return 'трикутника';
-                case 'quadrilateral': return 'четырехкутника';
-                case 'pentagon': return "п'ятикутника";
-                default: return 'фігури';
-            }
-        }
+    drawLines: function (points) {
+      for (let i = 0; i < points.length; i++) {
+        const start = points[i];
+        const end = points[(i + 1) % points.length];
 
-        // === ВІДМАЛЮВАННЯ ЛІНІЙ ===
-        
-        function drawLines(points) {
-            clearLines();
-            const container = document.querySelector('#linesContainer');
-            
-            for (let i = 0; i < points.length; i++) {
-                const start = points[i];
-                const end = points[(i + 1) % points.length];
-                
-                const line = createLine(
-                    start.object3D.position,
-                    end.object3D.position
-                );
-                
-                container.appendChild(line);
-                activeLines.push(line);
-            }
-        }
+        const cylinder = document.createElement('a-entity');
+        const distance = start.distanceTo(end);
+        const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
 
-        function createLine(start, end) {
-            const line = document.createElement('a-entity');
-            
-            // Розрахунок позиції та ротації лінії
-            const distance = GeometryCalculator.distance(start, end);
-            const midpoint = {
-                x: (start.x + end.x) / 2,
-                y: (start.y + end.y) / 2,
-                z: (start.z + end.z) / 2
-            };
-            
-            const direction = {
-                x: end.x - start.x,
-                y: end.y - start.y,
-                z: end.z - start.z
-            };
-            
-            const rotationY = Math.atan2(direction.x, direction.z) * 180 / Math.PI;
-            const rotationX = Math.atan2(direction.y, Math.sqrt(direction.x * direction.x + direction.z * direction.z)) * 180 / Math.PI;
-            
-            line.setAttribute('geometry', `primitive: cylinder; radius: 0.02; height: ${distance}`);
-            line.setAttribute('material', 'color: #FF6B35; metalness: 0.8');
-            line.setAttribute('position', `${midpoint.x} ${midpoint.y} ${midpoint.z}`);
-            line.setAttribute('rotation', `${-rotationX} ${rotationY} 0`);
-            
-            return line;
-        }
+        const direction = new THREE.Vector3().subVectors(end, start).normalize();
+        const quaternion = new THREE.Quaternion();
+        quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
 
-        function clearLines() {
-            activeLines.forEach(line => line.remove());
-            activeLines = [];
-        }
+        cylinder.setAttribute('geometry', `primitive: cylinder; radius: 0.02; height: ${distance}`);
+        cylinder.setAttribute('material', 'color: #FF6B35');
+        cylinder.object3D.position.copy(midpoint);
+        cylinder.object3D.quaternion.copy(quaternion);
 
-        // === РОЗРАХУНОК ВЛАСТИВОСТЕЙ ===
-        
-        function calculateProperties(markers) {
-            const points = markers.map(marker => marker.object3D.position);
-            let calculations = '';
-            
-            if (currentMode === 'triangle' && points.length === 3) {
-                const sides = [
-                    GeometryCalculator.distance(points[0], points[1]),
-                    GeometryCalculator.distance(points[1], points[2]),
-                    GeometryCalculator.distance(points[2], points[0])
-                ];
-                
-                const angles = [
-                    GeometryCalculator.angle(points[2], points[0], points[1]),
-                    GeometryCalculator.angle(points[0], points[1], points[2]),
-                    GeometryCalculator.angle(points[1], points[2], points[0])
-                ];
-                
-                const area = GeometryCalculator.triangleArea(points[0], points[1], points[2]);
-                const perimeter = sides.reduce((sum, side) => sum + side, 0);
-                
-                calculations = `
-                    <div class="calculation">
-                        <strong>Сторони:</strong><br>
-                        AB = ${sides[0].toFixed(2)}<br>
-                        BC = ${sides[1].toFixed(2)}<br>
-                        CA = ${sides[2].toFixed(2)}
-                    </div>
-                    <div class="calculation">
-                        <strong>Кути:</strong><br>
-                        ∠A = ${angles[0].toFixed(1)}°<br>
-                        ∠B = ${angles[1].toFixed(1)}°<br>
-                        ∠C = ${angles[2].toFixed(1)}°
-                    </div>
-                    <div class="calculation">
-                        <strong>Площа:</strong> ${area.toFixed(2)}<br>
-                        <strong>Периметр:</strong> ${perimeter.toFixed(2)}
-                    </div>
-                `;
-            } else if (points.length >= 4) {
-                const area = GeometryCalculator.polygonArea(points);
-                let perimeter = 0;
-                
-                for (let i = 0; i < points.length; i++) {
-                    const next = (i + 1) % points.length;
-                    perimeter += GeometryCalculator.distance(points[i], points[next]);
-                }
-                
-                calculations = `
-                    <div class="calculation">
-                        <strong>Площа:</strong> ${area.toFixed(2)}<br>
-                        <strong>Периметр:</strong> ${perimeter.toFixed(2)}<br>
-                        <strong>Кількість вершин:</strong> ${points.length}
-                    </div>
-                `;
-            }
-            
-            updateInfo(`${getModeLabel().charAt(0).toUpperCase() + getModeLabel().slice(1)} побудовано!`, calculations);
-        }
+        this.scene.appendChild(cylinder);
+        this.lines.push(cylinder);
+      }
+    },
 
-        // === ОНОВЛЕННЯ ІНТЕРФЕЙСУ ===
-        
-        function updateInfo(title = 'Готово до роботи', calculations = '') {
-            document.getElementById('infoTitle').textContent = title;
-            document.getElementById('calculations').innerHTML = calculations;
-        }
+    clearLines: function () {
+      this.lines.forEach(line => line.remove());
+      this.lines = [];
+    },
 
-        // === ІНІЦІАЛІЗАЦІЯ ===
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // Чекаємо завантаження A-Frame
-            document.querySelector('a-scene').addEventListener('loaded', () => {
-                setTimeout(() => {
-                    initializeMarkerTracking();
-                    updateInfo();
-                }, 1000);
-            });
-        });
+    calculateProperties: function (points) {
+      let perimeter = 0;
+      const calculationsEl = document.getElementById('calculations');
+      calculationsEl.innerHTML = ''; // очищаємо панель
 
-        // === КОМПОНЕНТ ТРИКУТНИКА ===
-        
-        AFRAME.registerGeometry('triangle', {
-            schema: {
-                vertices: {default: '0 1 0, -1 -1 0, 1 -1 0'}
-            },
-            
-            init: function(data) {
-                const vertices = data.vertices.split(',').map(v => {
-                    const coords = v.trim().split(' ').map(Number);
-                    return new THREE.Vector3(coords[0], coords[1], coords[2]);
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i];
+        const b = points[(i + 1) % points.length];
+        const d = a.distanceTo(b);
+        perimeter += d;
+
+        const div = document.createElement('div');
+        div.className = 'calculation';
+        div.textContent = `Довжина сторони ${i + 1}: ${d.toFixed(3)} (од.)`;
+        calculationsEl.appendChild(div);
+      }
+
+      const area = this.computeAreaXZ(points);
+      const divArea = document.createElement('div');
+      divArea.className = 'calculation';
+      divArea.textContent = `Периметр: ${perimeter.toFixed(3)} (од.)\nПлоща (проекція XZ): ${area.toFixed(3)} (од.²)`;
+      calculationsEl.appendChild(divArea);
+    },
+
+    clearCalculations: function () {
+      const calculationsEl = document.getElementById('calculations');
+      calculationsEl.innerHTML = '';
+    },
+
+    computeAreaXZ: function (pts) {
+      let area = 0;
+      const n = pts.length;
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        area += pts[i].x * pts[j].z - pts[j].x * pts[i].z;
+      }
+      return Math.abs(area / 2);
+    },
+
+    setRequiredPoints: function (newIds) {
+      // Змінюємо потрібні маркери, перенастроюємо слухачі та очистка
+      this.requiredIds = newIds;
+      this.detectedPoints = {};
+      this.clearLines();
+      this.clearCalculations();
+      this.setupMarkerTracking();
+    }
+  });
+
+  // Ініціалізуємо режим за замовчуванням при завантаженні сторінки
+  window.addEventListener('DOMContentLoaded', () => {
+    setMode('triangle');
+  });
+  
+AFRAME.registerComponent('figure-builder', {
+    init: function () {
+        this.detectedPoints = {};
+        this.lines = [];
+        this.requiredIds = ['pointA', 'pointB', 'pointC']; // зміниш залежно від фігури
+        this.scene = this.el.sceneEl;
+
+        this.setupMarkerTracking();
+    },
+
+    setupMarkerTracking: function () {
+        this.requiredIds.forEach(id => {
+            const marker = document.getElementById(id);
+            if (marker) {
+                marker.addEventListener('markerFound', () => {
+                    console.log(`🔵 ${id} знайдено`);
+                    this.detectedPoints[id] = marker;
+                    this.updateGeometry();
                 });
-                
-                const geometry = new THREE.BufferGeometry();
-                const positions = new Float32Array(vertices.length * 3);
-                
-                vertices.forEach((vertex, i) => {
-                    positions[i * 3] = vertex.x;
-                    positions[i * 3 + 1] = vertex.y;
-                    positions[i * 3 + 2] = vertex.z;
+                marker.addEventListener('markerLost', () => {
+                    console.log(`⚪️ ${id} втрачено`);
+                    delete this.detectedPoints[id];
+                    this.clearLines();
                 });
-                
-                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geometry.setIndex([0, 1, 2]);
-                geometry.computeVertexNormals();
-                
-                this.geometry = geometry;
             }
         });
-    </script>
+    },
+
+    updateGeometry: function () {
+        const ids = this.requiredIds;
+        if (ids.every(id => id in this.detectedPoints)) {
+            const points = ids.map(id => this.getMarkerPosition(this.detectedPoints[id]));
+            this.clearLines();
+            this.drawLines(points);
+            this.calculateProperties(points);
+        }
+    },
+
+    getMarkerPosition: function (marker) {
+        const pos = new THREE.Vector3();
+        marker.object3D.getWorldPosition(pos);
+        return pos;
+    },
+
+    drawLines: function (points) {
+        for (let i = 0; i < points.length; i++) {
+            const start = points[i];
+            const end = points[(i + 1) % points.length]; // замкнене коло
+
+            const cylinder = document.createElement('a-entity');
+
+            const distance = start.distanceTo(end);
+            const midpoint = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+
+            const direction = new THREE.Vector3().subVectors(end, start).normalize();
+            const quaternion = new THREE.Quaternion();
+            quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+
+            cylinder.setAttribute('geometry', `primitive: cylinder; radius: 0.02; height: ${distance}`);
+            cylinder.setAttribute('material', 'color: #FF6B35');
+            cylinder.object3D.position.copy(midpoint);
+            cylinder.object3D.quaternion.copy(quaternion);
+
+            this.scene.appendChild(cylinder);
+            this.lines.push(cylinder);
+        }
+    },
+
+    clearLines: function () {
+        this.lines.forEach(line => line.remove());
+        this.lines = [];
+    },
+
+    calculateProperties: function (points) {
+        let lengthSum = 0;
+        for (let i = 0; i < points.length; i++) {
+            const a = points[i];
+            const b = points[(i + 1) % points.length];
+            const d = a.distanceTo(b);
+            lengthSum += d;
+            console.log(`📏 Довжина ${i}–${(i + 1) % points.length}:`, d.toFixed(2));
+        }
+
+        let area = this.computeAreaXZ(points);
+        console.log(`📐 Периметр: ${lengthSum.toFixed(2)}\n📌 Площа (проекція на XZ): ${area.toFixed(2)}`);
+    },
+
+    computeAreaXZ: function (pts) {
+        let area = 0;
+        const n = pts.length;
+        for (let i = 0; i < n; i++) {
+            const j = (i + 1) % n;
+            area += pts[i].x * pts[j].z - pts[j].x * pts[i].z;
+        }
+        return Math.abs(area / 2);
+    }
+});
+</script>
 </body>
 </html>
